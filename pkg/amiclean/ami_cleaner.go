@@ -35,7 +35,15 @@ func (a *AMIClean) GetImages() (*ec2.DescribeImagesOutput, error) {
 	var output *ec2.DescribeImagesOutput
 
 	input := &ec2.DescribeImagesInput{
-		Owners: []*string{aws.String("self")},
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("tag:type"),
+				Values: []*string{
+					aws.String("efs-alpha"),
+				},
+			},
+		},
+			
 	}
 
 	output, err := a.EC2Client.DescribeImages(input)
